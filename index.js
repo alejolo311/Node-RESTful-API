@@ -6,38 +6,36 @@
 
 // Dependencies
 const http = require("http");
-const url = require("url");
-const StringDecoder = require("string_decoder").StringDecoder;
+const { parse } = require("./parser");
+const { router } = require("./router");
 
 // Setting the response of the server
 let server = http.createServer((req, res) => {
-  // Parse the url
-  let parsedUrl = url.parse(req.url, true);
+  // Parse all the request and store it in a object
+  let data = parse(req);
 
-  // Get the path
-  let path = parsedUrl.pathname;
-  let trimmedPath = path.replace(/^\/+|\/+$/g, "");
+  // Send the path to the router to obtain the correct handler for each case
+  let handler = router(data.trimmedPath);
 
-  // Ge the Querystring
-  let queryString = parsedUrl.query;
+  // Call the handler to execute the action required by te user
+  handler(data, (statusCode, payload) => {
+    // Check if the handler return the status code
+    statusCode = typeof statusCode == "number" ? statusCode : 200;
 
-  // Get the HTTP method
-  let method = req.method.toLowerCase();
+    // Check if the handler return the payload
+    payload = typeof payload == "object" ? payload : {};
 
-  // Get the headers
-  let headers = req.headers;
+    // Convert the payload-object in a string
+    let payloadString = JSON.stringify(payload);
 
-  // get the Payload
-  let decoder = new StringDecoder("utf-8");
-  let payloadBuffer = "";
-  req.on("data", data => {
-    payloadBuffer += decoder.write(data);
-  });
-  req.on("end", () => {
-    payloadBuffer += decoder.end();
+    // Set the content type header in json format
+    res.setHeader("Content-Type", "application/json");
 
-    // Send the response
-    res.end("Hello world \n");
+    // Reponse the status code
+    res.writeHead(statusCode);
+
+    // Response to the client
+    res.end(payloadString);
   });
 });
 
