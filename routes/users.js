@@ -26,14 +26,25 @@ _users.post = (data, callback) => {
       : false;
   let phone =
     typeof data.payload.phone == "string" &&
-    data.payload.phone.trim().lenght == 10
+    data.payload.phone.trim().lenght == 13
       ? data.payload.phone.trim()
       : false;
   let password =
     typeof data.payload.password == "string" &&
-    data.payload.password.trim().lenght == 10
+    data.payload.password.trim().lenght >= 8
       ? data.payload.password.trim()
       : false;
+  let tosAgreement =
+    typeof data.payload.tosAgreement == "boolean" &&
+    data.payload.tosAgreement == true
+      ? true
+      : false;
+  if (firstName && lastName && phone && password && tosAgreement) {
+    console.log(firstName, lastName, phone, password, tosAgreement);
+  } else {
+    console.log(firstName, lastName, phone, password, tosAgreement);
+    callback(400, { Error: "missing required fields" });
+  }
 };
 _users.put = (data, callback) => {};
 _users.delete = (data, callback) => {};
