@@ -5,8 +5,8 @@ This api aims to give the user an effective way to check if a specific url is on
 
 ## Goals
 
-- [ ] The API listens on a PORT and accepts incoming HTTP requests for POST, GET, PUT, DELETE and HEAD.
-- [ ] The API allows a client to connect, then create a new user, then edit and delete the user.
+- [x] The API listens on a PORT and accepts incoming HTTP requests for POST, GET, PUT, DELETE and HEAD.
+- [x] The API allows a client to connect, then create a new user, then edit and delete the user.
 - [ ] The API allows a user to "sign in" which gives them a token that they can use for subsequent authenticated requests.
 - [ ] The API allows the user to "sign out" which invalidates their token.
 - [ ] The API allows a signed-in user to user their token to create a new "check"
