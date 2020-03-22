@@ -7,15 +7,13 @@
 // Dependencies
 const http = require("http");
 const https = require("https");
-const { parse } = require("./helpers/parser");
-const { router } = require("./helpers/router");
+const { parser, router, fileStorage } = require("./lib");
 const config = require("./config/config.js");
 const fs = require("fs");
 
-// instance of HTTP server
 let httpServer = http.createServer((req, res) => {
   // Parse all the request and store it in a object
-  let data = parse(req);
+  let data = parser(req);
 
   // Send the path and the data to the router
   router(data, res);
@@ -32,7 +30,7 @@ let httpsServerOptions = {
 };
 let httpsServer = https.createServer(httpsServerOptions, (req, res) => {
   // Parse all the request and store it in a object
-  let data = parse(req);
+  let data = parser(req);
 
   // Send the path and the data to the router
   router(data, res);
